@@ -7,8 +7,7 @@ from orbitfabric.adapter_manager.inventory import InstalledAdapterInventory
 from orbitfabric.adapter_manager.models import InstalledAdapterRecord
 from typer.testing import CliRunner
 
-from orbitfabric_github_release_source import GitHubReleaseSource
-from orbitfabric_github_release_source import cli
+from orbitfabric_github_release_source import GitHubReleaseSource, cli
 from orbitfabric_github_release_source.cli import app
 
 from ._support import _happy_case
