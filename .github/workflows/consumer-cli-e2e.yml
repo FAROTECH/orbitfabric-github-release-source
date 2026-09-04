@@ -1,0 +1,94 @@
+name: Consumer CLI E2E
+
+on:
+  pull_request:
+    paths:
+      - src/**
+      - tests/**
+      - pyproject.toml
+      - .github/workflows/consumer-cli-e2e.yml
+  push:
+    branches:
+      - main
+    paths:
+      - src/**
+      - tests/**
+      - pyproject.toml
+      - .github/workflows/consumer-cli-e2e.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fprime-public-release:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      ORBITFABRIC_STATE_DIR: ${{ runner.temp }}/orbitfabric-state
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install exact OrbitFabric Core U1 baseline
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "git+https://github.com/FAROTECH/orbitfabric.git@714403034b49b7b7c67fcf42ab2c14feff79295f"
+
+      - name: Install GitHub Release Source branch
+        run: python -m pip install -e . --no-deps
+
+      - name: Fetch exact public Catalog and Project Lock fixtures
+        run: |
+          curl --fail --silent --show-error --location \
+            "https://raw.githubusercontent.com/FAROTECH/orbitfabric-adapter-catalog/8b749de1eff8050d008dc0154af5c4069c9a6949/catalog.json" \
+            --output catalog.json
+          curl --fail --silent --show-error --location \
+            "https://raw.githubusercontent.com/FAROTECH/orbitfabric-adapter-catalog/8b749de1eff8050d008dc0154af5c4069c9a6949/e2e/locks/fprime-0.1.1.json" \
+            --output fprime-lock.json
+
+      - name: Inspect exact release through Core Catalog CLI
+        run: |
+          orbitfabric adapter catalog validate catalog.json
+          orbitfabric adapter catalog select \
+            catalog.json \
+            github.com/FAROTECH:orbitfabric/fprime \
+            --version 0.1.1
+
+      - name: Resolve exact public release through provider CLI
+        run: |
+          orbitfabric-github-release-source resolve \
+            catalog.json \
+            github.com/FAROTECH:orbitfabric/fprime \
+            --version 0.1.1 \
+            --output-dir "${RUNNER_TEMP}/resolved-fprime"
+          test -f "${RUNNER_TEMP}/resolved-fprime/adapter-release.json"
+          test -f "${RUNNER_TEMP}/resolved-fprime/orbitfabric_fprime_adapter-0.1.1-py3-none-any.whl"
+
+      - name: Ensure exact Project Lock entry
+        run: |
+          orbitfabric-github-release-source ensure \
+            catalog.json \
+            fprime-lock.json \
+            github.com/FAROTECH:orbitfabric/fprime
+          orbitfabric adapter lock check fprime-lock.json
+
+      - name: Verify installed adapter after acquisition outputs are removed
+        run: |
+          rm -rf "${RUNNER_TEMP}/resolved-fprime"
+          INSTANCE_ID="$(orbitfabric adapter list --json | python -c 'import json,sys; print(json.load(sys.stdin)[0]["instance_id"])')"
+          orbitfabric adapter verify "${INSTANCE_ID}"
+
+      - name: Repeat ensure without Catalog availability
+        run: |
+          rm catalog.json
+          orbitfabric-github-release-source ensure \
+            missing-catalog.json \
+            fprime-lock.json \
+            github.com/FAROTECH:orbitfabric/fprime | tee second-ensure.txt
+          grep -F "Action: NOOP" second-ensure.txt
+          grep -F "Remote resolution: skipped" second-ensure.txt
+          orbitfabric adapter lock check fprime-lock.json
