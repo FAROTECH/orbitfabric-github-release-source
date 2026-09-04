@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Python checks (${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install exact OrbitFabric Core P0 baseline
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "git+https://github.com/FAROTECH/orbitfabric.git@4ba7a0b51a071b91150be4271fef6c6010bc80fd"
+      - name: Install development tooling
+        run: python -m pip install "pytest>=8.0" "ruff>=0.5" "build>=1.2"
+      - name: Install source product without resolving unreleased Core dependency
+        run: python -m pip install -e . --no-deps
+      - name: Ruff
+        run: ruff check .
+      - name: Tests
+        run: pytest
+      - name: Build package
+        run: python -m build
+      - name: Wheel install and import smoke
+        run: |
+          python -m pip install --force-reinstall --no-deps dist/*.whl
+          python -c "from orbitfabric_github_release_source import GitHubReleaseSource; print(GitHubReleaseSource.__name__)"
