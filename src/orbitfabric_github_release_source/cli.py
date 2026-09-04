@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-
 from orbitfabric.adapter_manager import (
     AdapterCatalog,
     AdapterManager,
