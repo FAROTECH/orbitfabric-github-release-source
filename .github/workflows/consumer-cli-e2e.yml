@@ -25,13 +25,15 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ github.token }}
-      ORBITFABRIC_STATE_DIR: ${{ runner.temp }}/orbitfabric-state
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Initialize isolated OrbitFabric state
+        run: echo "ORBITFABRIC_STATE_DIR=${RUNNER_TEMP}/orbitfabric-state" >> "${GITHUB_ENV}"
 
       - name: Install exact OrbitFabric Core U1 baseline
         run: |
