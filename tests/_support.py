@@ -15,6 +15,7 @@ from orbitfabric.adapter_manager import (
     ExactCatalogReleaseSource,
 )
 from orbitfabric.adapter_manager.models import AdapterSourceCoordinate
+
 from orbitfabric_github_release_source import (
     GitHubApiClient,
     GitHubReleaseSource,
