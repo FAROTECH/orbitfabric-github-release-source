@@ -115,26 +115,24 @@ GitHub Release Source
 
 ## Development baseline
 
-Current development is validated against OrbitFabric Core commit:
+OrbitFabric Core `v1.3.0` is now the public Core baseline that provides the provider-neutral Catalog API and CLI required by this product.
+
+Current development remains validated against the exact pre-release Core integration commit:
 
 ```text
 714403034b49b7b7c67fcf42ab2c14feff79295f
 ```
 
-That commit includes the provider-neutral Catalog API promoted by Core PR #253 and the provider-neutral Catalog CLI promoted by Core PR #254.
-
-The package declares the intended first released Core dependency as:
+The package dependency is:
 
 ```text
 orbitfabric>=1.3,<2
 ```
 
-Until that Core minor release exists, development CI installs the exact Core commit first and installs this package with dependency resolution disabled.
-
-No public package release should claim that Core `1.2.0` contains the Catalog API or consumer CLI.
+Core `1.2.x` does not contain the Catalog API or consumer CLI used by this product.
 
 ## Current status
 
-Pre-release productization. The GitHub provider implementation and provider-explicit consumer CLI are being validated before the first packaged release.
+Pre-release productization. The GitHub provider implementation and provider-explicit consumer CLI are validated against the public Core `v1.3.0` contract line, but this repository does not yet publish its own packaged GitHub Release.
 
 No universal Release Source provider protocol is defined by this repository.
