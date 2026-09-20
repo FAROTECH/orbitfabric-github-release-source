@@ -7,6 +7,10 @@ on:
 permissions:
   contents: read
 
+env:
+  ORBITFABRIC_CORE_REPOSITORY: FAROTECH/orbitfabric
+  ORBITFABRIC_CORE_REF: 714403034b49b7b7c67fcf42ab2c14feff79295f
+
 jobs:
   checks:
     name: Python checks (${{ matrix.python }})
@@ -22,7 +26,7 @@ jobs:
       - name: Install exact OrbitFabric Core U1 baseline
         run: |
           python -m pip install --upgrade pip
-          python -m pip install "git+https://github.com/FAROTECH/orbitfabric.git@714403034b49b7b7c67fcf42ab2c14feff79295f"
+          python -m pip install "git+https://github.com/${ORBITFABRIC_CORE_REPOSITORY}.git@${ORBITFABRIC_CORE_REF}"
       - name: Install development tooling
         run: python -m pip install "pytest>=8.0" "ruff>=0.5" "build>=1.2"
       - name: Install source product without resolving unreleased Core dependency
