@@ -21,9 +21,9 @@ permissions:
   contents: read
 
 env:
-  ORBITFABRIC_CORE_REPOSITORY: FAROTECH/orbitfabric
+  ORBITFABRIC_CORE_REPOSITORY: OrbitFabric/orbitfabric
   ORBITFABRIC_CORE_REF: 714403034b49b7b7c67fcf42ab2c14feff79295f
-  ORBITFABRIC_CATALOG_REPOSITORY: FAROTECH/orbitfabric-adapter-catalog
+  ORBITFABRIC_CATALOG_REPOSITORY: OrbitFabric/orbitfabric-adapter-catalog
   ORBITFABRIC_CATALOG_REF: 8b749de1eff8050d008dc0154af5c4069c9a6949
 
 jobs:
