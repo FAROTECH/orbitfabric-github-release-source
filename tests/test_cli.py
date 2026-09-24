@@ -12,7 +12,7 @@ from orbitfabric_github_release_source.cli import app
 
 from ._support import _happy_case
 
-SOURCE_COORDINATE = "github.com/FAROTECH:orbitfabric/fprime"
+SOURCE_COORDINATE = "github.com/OrbitFabric:orbitfabric/fprime"
 
 
 def _write_catalog(tmp_path: Path, selection) -> Path:
@@ -125,11 +125,11 @@ def test_resolve_cli_materializes_exact_release(tmp_path: Path, monkeypatch) -> 
 
     assert result.exit_code == 0
     assert f"Resolved: {SOURCE_COORDINATE}@0.1.1" in result.stdout
-    assert "Provider repository: FAROTECH/orbitfabric-fprime-adapter" in result.stdout
+    assert "Provider repository: OrbitFabric/orbitfabric-fprime-adapter" in result.stdout
     assert "release_descriptor_integrity=PASS" in result.stdout
     assert (output / "adapter-release.json").is_file()
     assert (output / "adapter-0.1.1-py3-none-any.whl").is_file()
-    assert client.release_calls == [("FAROTECH/orbitfabric-fprime-adapter", "v0.1.1")]
+    assert client.release_calls == [("OrbitFabric/orbitfabric-fprime-adapter", "v0.1.1")]
     assert len(client.download_calls) == 2
 
 
@@ -222,7 +222,7 @@ def test_ensure_missing_lock_coordinate_fails_before_provider(tmp_path: Path, mo
             "ensure",
             str(catalog),
             str(lock),
-            "github.com/FAROTECH:orbitfabric/missing",
+            "github.com/OrbitFabric:orbitfabric/missing",
         ],
         env={"ORBITFABRIC_STATE_DIR": str(tmp_path / "empty-state")},
     )

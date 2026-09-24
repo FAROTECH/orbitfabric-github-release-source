@@ -27,7 +27,7 @@ def test_invalid_descriptor_fails_closed(tmp_path: Path) -> None:
 def test_descriptor_source_coordinate_mismatch_fails_closed(tmp_path: Path) -> None:
     descriptor = _descriptor_bytes(
         source_coordinate={
-            "authority": "github.com/FAROTECH",
+            "authority": "github.com/OrbitFabric",
             "publisher": "orbitfabric",
             "name": "different",
         }

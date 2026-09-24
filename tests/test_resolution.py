@@ -33,12 +33,12 @@ def test_happy_path_materializes_exact_release_and_provider_facts(tmp_path: Path
     assert resolved.descriptor_path.read_bytes() == descriptor_bytes
     assert resolved.artifact_path.read_bytes() == artifact_bytes
     assert client.release_calls == [
-        ("FAROTECH/orbitfabric-fprime-adapter", "v0.1.1")
+        ("OrbitFabric/orbitfabric-fprime-adapter", "v0.1.1")
     ]
     assert len(client.download_calls) == 2
 
     facts = result.provider_facts
-    assert facts.repository == "FAROTECH/orbitfabric-fprime-adapter"
+    assert facts.repository == "OrbitFabric/orbitfabric-fprime-adapter"
     assert facts.release_ref == "v0.1.1"
     assert facts.release_id == 12345
     assert facts.tag_name == "v0.1.1"
@@ -198,7 +198,7 @@ def test_multiple_github_sources_fail_without_inventing_provider_preference(
     "config",
     [
         {},
-        {"repository": "FAROTECH/repo", "extra": "not-allowed"},
+        {"repository": "OrbitFabric/repo", "extra": "not-allowed"},
         {"repository": "missing-slash"},
         {"repository": "owner/repo/extra"},
         {"repository": 123},

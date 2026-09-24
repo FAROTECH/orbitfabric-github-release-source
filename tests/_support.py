@@ -99,7 +99,7 @@ def _descriptor_bytes(
         "descriptor_version": "0.1-candidate",
         "source_coordinate": source_coordinate
         or {
-            "authority": "github.com/FAROTECH",
+            "authority": "github.com/OrbitFabric",
             "publisher": "orbitfabric",
             "name": "fprime",
         },
@@ -122,7 +122,7 @@ def _selection(
     return ExactCatalogReleaseSelection(
         source_coordinate=source_coordinate
         or AdapterSourceCoordinate(
-            authority="github.com/FAROTECH",
+            authority="github.com/OrbitFabric",
             publisher="orbitfabric",
             name="fprime",
         ),
@@ -137,7 +137,7 @@ def _selection(
                 binding=CatalogSourceBinding(
                     id="github-fprime",
                     provider="github-release",
-                    config={"repository": "FAROTECH/orbitfabric-fprime-adapter"},
+                    config={"repository": "OrbitFabric/orbitfabric-fprime-adapter"},
                 ),
                 release_ref="v0.1.1",
             )
