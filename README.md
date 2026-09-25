@@ -31,16 +31,16 @@ The package installs:
 orbitfabric-github-release-source
 ```
 
-The CLI is intentionally provider-explicit. OrbitFabric Core does not dispatch `github-release` bindings itself.
+The provider CLI remains available for explicit resolution and Project Lock ensure. Core 1.4.0 adds the public `orbitfabric adapter install <adapter> --version <exact-version>` application composition.
 
 ### Resolve one exact release
 
 ```bash
 orbitfabric-github-release-source resolve \
   path/to/catalog.json \
-  github.com/FAROTECH:orbitfabric/fprime \
-  --version 0.1.1 \
-  --output-dir ./resolved-fprime
+  github.com/OrbitFabric:orbitfabric/openc3-cosmos \
+  --version 0.2.0 \
+  --output-dir ./resolved-cosmos
 ```
 
 The command:
@@ -62,7 +62,7 @@ If `GITHUB_TOKEN` is present in the environment it is used for GitHub requests. 
 orbitfabric-github-release-source ensure \
   path/to/catalog.json \
   path/to/adapter-lock.json \
-  github.com/FAROTECH:orbitfabric/fprime
+  github.com/OrbitFabric:orbitfabric/openc3-cosmos
 ```
 
 `ensure` is deliberately Project-Lock-driven. It does **not** accept a second `--version` input because the Project Lock already owns the exact desired release version.
@@ -90,28 +90,11 @@ otherwise
 
 This preserves the important property that an already-satisfied project does not depend on Catalog or provider availability merely to remain satisfied.
 
-## Why this is not a Core provider dispatcher
+## Core application composition
 
-A shorter future UX may eventually look conceptually like:
+Core 1.4.0 calls this package's existing resolver and passes the resulting `ResolvedAdapterRelease` to `AdapterManager.install_resolved`. GitHub transport stays in this package; lifecycle semantics stay in Core. No generic provider protocol is introduced.
 
-```text
-orbitfabric adapter install <adapter> --version <version>
-```
-
-That requires Core to map provider identifiers to installed provider implementations.
-
-This repository does not define that protocol. A generic provider registration/dispatch mechanism remains deferred until a second materially different provider provides enough evidence to generalize safely.
-
-The current supported split is therefore explicit:
-
-```text
-Core
-    local Catalog validate/list/select
-    Project Lock / install lifecycle
-
-GitHub Release Source
-    GitHub-specific resolve/ensure orchestration
-```
+The coordinated product install uses exact wheel assets and an SHA-256-bound requirements manifest from the Core release. This 0.1.0 candidate is unpublished pending review.
 
 ## Development baseline
 

@@ -1,3 +1,4 @@
+# Historical release identity regression: FAROTECH coordinates below are immutable.
 name: Consumer CLI E2E
 
 on:
